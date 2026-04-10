@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diligent Audit Companion</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <!-- Top bar (draggable region) -->
+      <header class="topbar" id="topbar">
+        <div class="topbar__left">
+          <button class="link topbar__dashboard-link hidden" id="goToDashboard" type="button">← Dashboard</button>
+          <div class="appmark">
+            <div class="appmark__text">
+              <div class="appmark__name"><span class="appmark__brand">Diligent</span> Audit Companion</div>
+              <div class="appmark__ws" id="workspaceLabel">Dashboard</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="topbar__center">
+          <button class="cmdk" id="cmdkBtn" type="button" title="Search / Command Palette (⌘K)">
+            <span class="cmdk__icon">⌘</span>
+            <span class="cmdk__label">Search cases, controls, owners…</span>
+            <span class="cmdk__kbd">⌘K</span>
+          </button>
+        </div>
+
+        <div class="topbar__right">
+          <div class="sync-pill" id="syncPill">
+            <span class="sync-dot"></span>
+            <span class="sync-text">Synced</span>
+          </div>
+          <button class="iconbtn" id="settingsBtn" type="button" title="Settings">
+            <span class="icon">⚙</span>
+          </button>
+          <button class="avatar" id="userBtn" type="button" title="User">
+            <span class="avatar__img">MA</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Dashboard view (default landing) -->
+      <div class="view view--dashboard" id="dashboardView" aria-label="Dashboard">
+        <div class="dashboard" id="dashboardRoot">
+          <div class="dashboard-chat-fullview-bar hidden" id="dashboardChatFullviewBar">
+            <button type="button" class="btn btn--secondary" id="dashboardChatSeeInApp">See it in the app</button>
+            <button type="button" class="link" id="dashboardChatBackToDashboard">Back to dashboard</button>
+          </div>
+          <section class="dashboard__hero">
+            <h1 class="dashboard__headline">You're on track, Brian</h1>
+            <p class="dashboard__subline">Turn four cases in your pipeline into defensible outcomes: the agent collects what's missing, boosts review confidence with on-demand deep checks, and ships ready-to-share packs.</p>
+          </section>
+          <section class="dashboard__section" aria-labelledby="dashboard-cases-title">
+            <div class="dashboard__section-head row row--between">
+              <h2 class="dashboard__section-title dashboard__section-title--light" id="dashboard-cases-title">Cases need your attention</h2>
+              <button class="link dashboard__see-all" type="button" id="dashboardSeeAll">See all</button>
+            </div>
+            <div class="dashboard__cards" id="dashboardCards" role="list"></div>
+          </section>
+          <section class="dashboard__section dashboard__section--aichat" aria-label="AI Chat">
+            <div class="dashboard-aichat">
+              <div class="dashboard-aichat__card">
+                <div class="dashboard-aichat__transcript" id="dashboardAiChatTranscript" role="log" aria-live="polite">
+                  <div class="dashboard-aichat__empty" id="dashboardAiChatEmpty">Send a message or pick a quick prompt below.</div>
+                </div>
+                <div class="dashboard-aichat__composer">
+                  <div class="dashboard-aichat__input-wrap">
+                    <textarea class="dashboard-aichat__input" id="dashboardAiChatInput" rows="1" placeholder="What should I confirm before you close the case?" aria-label="Chat message"></textarea>
+                  </div>
+                    <div class="dashboard-aichat__row" id="dashboardAiChatRow">
+                    <div class="dashboard-aichat__chips" id="dashboardAiChatChips">
+                      <button type="button" class="dashboard-aichat__chip" data-prompt="Deep review for Mastercard" id="dashboardAiChatChipDeepReview">Deep review for Mastercard</button>
+                      <button type="button" class="dashboard-aichat__chip" data-prompt="Create a summary for ISO27001">Create a summary for ISO27001</button>
+                      <button type="button" class="dashboard-aichat__chip" data-prompt="Status report about PCI Q1">Status report about PCI Q1</button>
+                    </div>
+                    <div class="dashboard-aichat__actions">
+                      <button type="button" class="dashboard-aichat__run" id="dashboardAiChatSend" disabled title="Send (Enter)" aria-label="Send message" data-state="run">
+                        <span class="dashboard-aichat__run-content">
+                          <span class="dashboard-aichat__run-text">Run</span>
+                          <span class="dashboard-aichat__run-kbd">⌘ ↵</span>
+                        </span>
+                        <span class="dashboard-aichat__run-stop" aria-hidden="true" title="Stop">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-label="Stop"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="dashboard-aichat__popover hidden" id="dashboardAiChatDeepReviewPopover" role="dialog" aria-labelledby="dashboardAiChatPopoverTitle" aria-describedby="dashboardAiChatPopoverBody dashboardAiChatPopoverDesc">
+                  <div class="dashboard-aichat__popover-icon" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M17.115 9.2998L18.24 7.0498L20.49 5.9248L18.24 4.7998L17.115 2.5498L15.99 4.7998L13.74 5.9248L15.99 7.0498L17.115 9.2998Z" fill="url(#paint0_linear_popover_icon)"/>
+                      <path d="M11.565 9.67478L9.24001 5.02478L6.91001 9.67478L2.26501 11.9998L6.91001 14.3248L9.24001 18.9748L11.565 14.3248L16.215 11.9998L11.565 9.67478Z" fill="url(#paint1_linear_popover_icon)"/>
+                      <path d="M15.99 16.9497L17.115 14.6997L18.24 16.9497L20.49 18.0747L18.24 19.1997L17.115 21.4497L15.99 19.1997L13.74 18.0747L15.99 16.9497Z" fill="url(#paint2_linear_popover_icon)"/>
+                      <defs>
+                        <linearGradient id="paint0_linear_popover_icon" x1="3.10294" y1="8.92852" x2="20.1202" y2="21.9335" gradientUnits="userSpaceOnUse">
+                          <stop stop-color="#BE0C1E"/>
+                          <stop offset="0.5" stop-color="#AB48DA"/>
+                          <stop offset="1" stop-color="#4069FE"/>
+                        </linearGradient>
+                        <linearGradient id="paint1_linear_popover_icon" x1="3.10294" y1="8.92852" x2="20.1202" y2="21.9335" gradientUnits="userSpaceOnUse">
+                          <stop stop-color="#BE0C1E"/>
+                          <stop offset="0.5" stop-color="#AB48DA"/>
+                          <stop offset="1" stop-color="#4069FE"/>
+                        </linearGradient>
+                        <linearGradient id="paint2_linear_popover_icon" x1="3.10294" y1="8.92852" x2="20.1202" y2="21.9335" gradientUnits="userSpaceOnUse">
+                          <stop stop-color="#BE0C1E"/>
+                          <stop offset="0.5" stop-color="#AB48DA"/>
+                          <stop offset="1" stop-color="#4069FE"/>
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
+                  <div class="dashboard-aichat__popover-title" id="dashboardAiChatPopoverTitle">Deep Review is on Pro</div>
+                  <p class="dashboard-aichat__popover-body" id="dashboardAiChatPopoverBody">Get higher-accuracy analysis and audit-ready summaries—so you can spend less time reviewing evidence and more time closing the case.</p>
+                  <ul class="dashboard-aichat__popover-desc" id="dashboardAiChatPopoverDesc" aria-label="Pro benefits">
+                    <li>Higher-accuracy analysis</li>
+                    <li>Audit-ready summary</li>
+                    <li>Save up to 2 hours per review</li>
+                  </ul>
+                  <p class="dashboard-aichat__popover-personalized">You used Deep Review 4 times last month—Pro is the most cost-effective option for frequent use.</p>
+                  <div class="dashboard-aichat__popover-actions">
+                    <button type="button" class="link dashboard-aichat__popover-upgrade" id="dashboardAiChatPopoverUpgrade">Upgrade to Pro</button>
+                    <button type="button" class="link dashboard-aichat__popover-close" id="dashboardAiChatPopoverClose">Not now</button>
+                  </div>
+                </div>
+                <div class="dashboard-aichat__popover hidden" id="dashboardAiChatSummaryPopover" role="dialog" aria-labelledby="dashboardAiChatSummaryPopoverTitle" aria-describedby="dashboardAiChatSummaryPopoverDesc">
+                  <div class="dashboard-aichat__popover-icon" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M17.115 9.2998L18.24 7.0498L20.49 5.9248L18.24 4.7998L17.115 2.5498L15.99 4.7998L13.74 5.9248L15.99 7.0498L17.115 9.2998Z" fill="url(#paint0_linear_summary_icon)"/>
+                      <path d="M11.565 9.67478L9.24001 5.02478L6.91001 9.67478L2.26501 11.9998L6.91001 14.3248L9.24001 18.9748L11.565 14.3248L16.215 11.9998L11.565 9.67478Z" fill="url(#paint1_linear_summary_icon)"/>
+                      <path d="M15.99 16.9497L17.115 14.6997L18.24 16.9497L20.49 18.0747L18.24 19.1997L17.115 21.4497L15.99 19.1997L13.74 18.0747L15.99 16.9497Z" fill="url(#paint2_linear_summary_icon)"/>
+                      <defs>
+                        <linearGradient id="paint0_linear_summary_icon" x1="3.10294" y1="8.92852" x2="20.1202" y2="21.9335" gradientUnits="userSpaceOnUse">
+                          <stop stop-color="#BE0C1E"/>
+                          <stop offset="0.5" stop-color="#AB48DA"/>
+                          <stop offset="1" stop-color="#4069FE"/>
+                        </linearGradient>
+                        <linearGradient id="paint1_linear_summary_icon" x1="3.10294" y1="8.92852" x2="20.1202" y2="21.9335" gradientUnits="userSpaceOnUse">
+                          <stop stop-color="#BE0C1E"/>
+                          <stop offset="0.5" stop-color="#AB48DA"/>
+                          <stop offset="1" stop-color="#4069FE"/>
+                        </linearGradient>
+                        <linearGradient id="paint2_linear_summary_icon" x1="3.10294" y1="8.92852" x2="20.1202" y2="21.9335" gradientUnits="userSpaceOnUse">
+                          <stop stop-color="#BE0C1E"/>
+                          <stop offset="0.5" stop-color="#AB48DA"/>
+                          <stop offset="1" stop-color="#4069FE"/>
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
+                  <div class="dashboard-aichat__popover-title" id="dashboardAiChatSummaryPopoverTitle">Summary is available on Pro.</div>
+                  <ul class="dashboard-aichat__popover-desc" id="dashboardAiChatSummaryPopoverDesc" aria-label="Pro benefits">
+                    <li>Clear, higher-accuracy summaries of your evidence and case notes</li>
+                    <li>Audit-ready format you can reuse in reports and documentation</li>
+                    <li>You can spend less time writing and more time closing the case</li>
+                  </ul>
+                  <div class="dashboard-aichat__popover-actions">
+                    <button type="button" class="link dashboard-aichat__popover-upgrade" id="dashboardAiChatSummaryPopoverUpgrade">Upgrade</button>
+                    <button type="button" class="link dashboard-aichat__popover-close" id="dashboardAiChatSummaryPopoverClose">Close</button>
+                  </div>
+                </div>
+                <div class="dashboard-aichat__error hidden" id="dashboardAiChatError">
+                  <span class="dashboard-aichat__error-text" id="dashboardAiChatErrorText"></span>
+                  <button type="button" class="link dashboard-aichat__error-retry" id="dashboardAiChatRetry">Retry</button>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="dashboard__section" aria-labelledby="dashboard-products-title">
+            <div class="dashboard__section-head">
+              <h2 class="dashboard__section-title dashboard__section-title--light" id="dashboard-products-title">Products</h2>
+            </div>
+            <div class="dashboard__muted-cards" id="dashboardMutedCards" role="list"></div>
+          </section>
+          <section class="dashboard__section" aria-labelledby="dashboard-capabilities-title">
+            <div class="dashboard__section-head">
+              <h2 class="dashboard__section-title dashboard__section-title--light" id="dashboard-capabilities-title">Boost your efficiency with Diligent AI</h2>
+            </div>
+            <div class="dashboard__feature-cards" role="list">
+              <article class="dashboard-feature-card" role="listitem">
+                <div class="dashboard-feature-card__icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg>
+                </div>
+                <h3 class="dashboard-feature-card__title">Deep evidence review</h3>
+                <p class="dashboard-feature-card__desc">Validate completeness, freshness, and defensibility in minutes—flag gaps, sensitive data, and vendor mentions, then auto-attach a reviewer-ready evidence pack.</p>
+              </article>
+              <article class="dashboard-feature-card" role="listitem">
+                <div class="dashboard-feature-card__icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8"/><path d="M8 11h6"/><path d="M12 15l1.5 1.5L15 15"/></svg>
+                </div>
+                <h3 class="dashboard-feature-card__title">Agentic audit packs &amp; summaries</h3>
+                <p class="dashboard-feature-card__desc">Turn due dates into deliverables: the agent drafts evidence requests, builds the pack index and memo, and prepares board-ready status updates—always with your approval.</p>
+              </article>
+              <article class="dashboard-feature-card" role="listitem">
+                <div class="dashboard-feature-card__icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
+                </div>
+                <h3 class="dashboard-feature-card__title">Highly accurate company research</h3>
+                <p class="dashboard-feature-card__desc">Generate a verified third-party snapshot using trusted sources—attestations, public filings, sanctions and incident signals—mapped to your entities and controls.</p>
+              </article>
+              <article class="dashboard-feature-card" role="listitem">
+                <div class="dashboard-feature-card__icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                </div>
+                <h3 class="dashboard-feature-card__title">Evidence-based audit outcome predictions</h3>
+                <p class="dashboard-feature-card__desc">Predict rejection risk before review—spot missing sign-offs, period mismatches, and weak artifacts, then get a prioritized fix-it plan to raise confidence fast.</p>
+              </article>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Case view (Mastercard / PLI working page) -->
+      <div class="view view--case hidden" id="caseView">
+      <div class="grid" id="grid">
+        <!-- Left: Cases -->
+        <aside class="panel panel--left" id="casesPanel" aria-label="Cases">
+          <div class="panel__inner">
+            <div class="panel__header">
+              <div class="chips" id="casesChips">
+                <button class="chip chip--active" data-filter="all" type="button">All</button>
+                <button class="chip" data-filter="overdue" type="button">Overdue</button>
+                <button class="chip" data-filter="in-progress" type="button">In progress</button>
+                <button class="chip" data-filter="awaiting-owner" type="button">Awaiting Owner</button>
+                <button class="chip" data-filter="needs-review" type="button">Needs Review</button>
+                <button class="chip" data-filter="audit-ready" type="button">Audit-ready</button>
+              </div>
+              <div class="row row--between">
+                <div class="muted">Sort</div>
+                <button class="iconbtn iconbtn--sm" id="casesSortBtn" type="button" title="Sort (Due → Risk → Activity)" aria-label="Sort cases">
+                  ⇅
+                </button>
+              </div>
+            </div>
+
+            <div class="panel__body" id="casesListWrap">
+              <div class="skeleton-list hidden" id="casesSkeleton" aria-hidden="true">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+              </div>
+              <div class="cases" id="casesList" role="list"></div>
+              <div class="empty hidden" id="casesEmpty">No cases match your filters.</div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Splitter -->
+        <div class="splitter" id="splitterLeft" role="separator" aria-orientation="vertical" tabindex="0"></div>
+
+        <!-- Center: Project -->
+        <main class="panel panel--center" id="projectPanel" aria-label="Project">
+          <div class="project">
+            <div class="project__header" id="projectHeader">
+              <div class="ph__left">
+                <div class="ph__title" id="projectTitle">—</div>
+                <div class="ph__subtitle" id="projectSubtitle">—</div>
+                <div class="ph__meta">
+                  <span class="badge badge--neutral" id="projectStatus">In progress</span>
+                </div>
+              </div>
+              <div class="ph__right">
+                <div class="kpis" id="projectKpis"></div>
+                <div class="actions">
+                  <button class="btn btn--primary" id="ctaRequest" type="button">Request Missing Evidence</button>
+                  <button class="btn btn--secondary" id="ctaPack" type="button">Generate Evidence Pack</button>
+                  <button class="btn btn--danger-outline" id="ctaEscalate" type="button">Escalate</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="project__content" id="projectContent">
+              <div class="crossfade" id="projectCrossfade">
+                <div class="project__cols">
+                  <!-- Left 60% -->
+                  <section class="col col--main">
+                    <div class="card">
+                      <div class="card__header row row--between">
+                        <div>
+                          <div class="card__title">Evidence Checklist</div>
+                          <div class="card__subtitle">Click a status badge to filter the checklist.</div>
+                        </div>
+                        <div class="row">
+                          <button class="chip chip--small chip--active" data-evidence-filter="all" type="button">All</button>
+                          <button class="chip chip--small" data-evidence-filter="missing" type="button">Missing</button>
+                          <button class="chip chip--small" data-evidence-filter="needs-review" type="button">Needs Review</button>
+                          <button class="chip chip--small" data-evidence-filter="rejected" type="button">Rejected</button>
+                        </div>
+                      </div>
+
+                      <div class="card__body">
+                        <div class="section">
+                          <div class="section__title">Required</div>
+                          <div class="evidence-list" id="evidenceRequired"></div>
+                        </div>
+                        <div class="section">
+                          <div class="section__title">Optional</div>
+                          <div class="evidence-list" id="evidenceOptional"></div>
+                        </div>
+                        <div class="section">
+                          <div class="section__title">Sensitive (PII/PAN)</div>
+                          <div class="evidence-list" id="evidenceSensitive"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card">
+                      <div class="card__header row row--between">
+                        <div class="card__title">Blockers</div>
+                        <div class="muted">Resolve to reach audit-ready</div>
+                      </div>
+                      <div class="card__body" id="blockersList"></div>
+                    </div>
+                  </section>
+
+                  <!-- Right 40% -->
+                  <section class="col col--side">
+                    <div class="card">
+                      <div class="card__header row row--between">
+                        <div class="card__title">Timeline / Activity</div>
+                        <button class="link" id="viewAllActivity" type="button">View all</button>
+                      </div>
+                      <div class="card__body">
+                        <div class="timeline" id="timelineList"></div>
+                      </div>
+                    </div>
+
+                    <div class="card">
+                      <div class="card__header">
+                        <div class="card__title">Audit Notes</div>
+                        <div class="card__subtitle">Structured notes for auditor alignment.</div>
+                      </div>
+                      <div class="card__body">
+                        <label class="field">
+                          <span class="field__label">Auditor expectation</span>
+                          <select class="select" id="auditorExpectation">
+                            <option>Evidence is complete, reproducible, and dated</option>
+                            <option>Sampling evidence matches population</option>
+                            <option>Control owner sign-off required</option>
+                          </select>
+                        </label>
+                        <label class="field">
+                          <span class="field__label">Sampling method</span>
+                          <input class="input" id="samplingMethod" type="text" placeholder="e.g., 3 random samples from Q4 population" />
+                        </label>
+                        <div class="field">
+                          <div class="field__label">Definition of Done</div>
+                          <label class="check"><input type="checkbox" id="dod1" /> <span>All required evidence uploaded</span></label>
+                          <label class="check"><input type="checkbox" id="dod2" /> <span>Sensitive data redacted where needed</span></label>
+                          <label class="check"><input type="checkbox" id="dod3" /> <span>Reviewer sign-off captured</span></label>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </div>
+
+              <div class="project-skeleton hidden" id="projectSkeleton" aria-hidden="true">
+                <div class="skeleton-line w60"></div>
+                <div class="skeleton-line w40"></div>
+                <div class="skeleton-block"></div>
+                <div class="skeleton-block"></div>
+              </div>
+            </div>
+
+            <!-- Evidence Pack dialog (modal) -->
+            <dialog class="dialog" id="packDialog" aria-label="Evidence Pack preview">
+              <div class="dialog__chrome">
+                <div class="dialog__header">
+                  <div>
+                    <div class="dialog__title">Evidence Pack Preview</div>
+                    <div class="dialog__subtitle">
+                      <span class="badge badge--success" id="redactionBadge">Redaction check passed</span>
+                    </div>
+                  </div>
+                  <button class="iconbtn" id="dialogClose" type="button" title="Close">✕</button>
+                </div>
+                <div class="dialog__body">
+                  <div class="table">
+                    <div class="table__head">
+                      <div>Evidence</div>
+                      <div>Status</div>
+                      <div>Owner</div>
+                    </div>
+                    <div class="table__body" id="packIndex"></div>
+                  </div>
+                </div>
+                <div class="dialog__footer">
+                  <button class="btn btn--secondary" id="packZip" type="button">Generate ZIP</button>
+                  <button class="btn btn--primary" id="packSend" type="button">Send to Reviewer</button>
+                </div>
+              </div>
+            </dialog>
+          </div>
+        </main>
+
+        <!-- Splitter -->
+        <div class="splitter" id="splitterRight" role="separator" aria-orientation="vertical" tabindex="0"></div>
+
+        <!-- Right: Agent chat -->
+        <aside class="panel panel--right" id="chatPanel" aria-label="Agent chat">
+          <div class="panel__inner panel__inner--chat">
+            <div class="chathead">
+              <div class="row row--between">
+                <div class="agent-state">
+                  <span class="pill" id="agentPill">Planning…</span>
+                  <span class="muted" id="agentMode">Mode: Plan</span>
+                </div>
+                <div class="row">
+                  <label class="toggle">
+                    <input type="checkbox" id="contextToggle" checked />
+                    <span>Case context</span>
+                  </label>
+                  <div class="menu">
+                    <button class="iconbtn" id="toolsBtn" type="button" title="Tools">⋯</button>
+                    <div class="menu__pop hidden" id="toolsMenu">
+                      <button class="menu__item" data-tool="request-email" type="button">Request email</button>
+                      <button class="menu__item" data-tool="create-task" type="button">Create task</button>
+                      <button class="menu__item" data-tool="scan" type="button">Run checklist scan</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="agent-objective">
+                <div class="kv">
+                  <div class="kv__k">Current objective</div>
+                  <div class="kv__v" id="agentObjective">Make case audit-ready by Jan 31</div>
+                </div>
+                <div class="kv">
+                  <div class="kv__k">Next action</div>
+                  <div class="kv__v" id="agentNext">Waiting for your approval to send evidence request</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="chatlog" id="chatLog"></div>
+
+            <div class="composer">
+              <div class="quickprompts" id="quickPrompts">
+                <button class="chip chip--small" data-prompt="Summarize blockers" type="button">Summarize blockers</button>
+                <button class="chip chip--small" data-prompt="Draft chase message" type="button">Draft chase</button>
+                <button class="chip chip--small" data-prompt="Generate evidence pack plan" type="button">Generate pack</button>
+              </div>
+              <div class="composebox" id="dropzone">
+                <textarea class="textarea" id="chatInput" rows="1" placeholder="Placeholder text or suggestion for prompt"></textarea>
+                <div class="compose-actions">
+                  <div class="compose-actions__left">
+                    <button class="iconbtn iconbtn--attach" id="attachBtn" type="button" title="Attach">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                      </svg>
+                    </button>
+                    <button class="btn btn--tools" id="toolsBtnChat" type="button">+ Tools +</button>
+                  </div>
+                  <div class="compose-actions__right">
+                    <button class="iconbtn iconbtn--mic" id="micBtn" type="button" title="Voice input">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                      </svg>
+                    </button>
+                    <button class="iconbtn iconbtn--send" id="sendBtn" type="button" title="Send">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="19" x2="12" y2="5"></line>
+                        <polyline points="5 12 12 5 19 12"></polyline>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="composer-disclaimer">
+                AI-generated content may have inaccuracies. <a href="#" class="link">Learn more.</a>
+              </div>
+              <div class="drop-hint hidden" id="dropHint">Drop files to attach → I’ll suggest evidence mapping.</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+      </div><!-- /.view--case -->
+
+      <!-- Context menu for cases -->
+      <div class="ctx hidden" id="caseCtx" role="menu" aria-label="Case menu">
+        <button class="ctx__item" data-action="pin" type="button">Pin</button>
+        <button class="ctx__item" data-action="snooze" type="button">Snooze</button>
+        <button class="ctx__item" data-action="escalate" type="button">Escalate</button>
+        <button class="ctx__item" data-action="export" type="button">Export index</button>
+      </div>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>
+

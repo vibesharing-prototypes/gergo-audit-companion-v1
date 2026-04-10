@@ -1,0 +1,12 @@
+<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="5" y1="4" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4F7CFF"/>
+      <stop offset="1" stop-color="#2ED47A"/>
+    </linearGradient>
+  </defs>
+  <rect x="2.5" y="2.5" width="23" height="23" rx="8" fill="rgba(18,26,38,0.9)" stroke="rgba(255,255,255,0.10)"/>
+  <!-- Abstract "D" mark (placeholder). Replace with official logo asset if you have one. -->
+  <path d="M11 8.2H14.35C17.75 8.2 20 10.35 20 14C20 17.65 17.75 19.8 14.35 19.8H11V8.2ZM13.5 10.35V17.65H14.25C16.25 17.65 17.45 16.4 17.45 14C17.45 11.6 16.25 10.35 14.25 10.35H13.5Z" fill="url(#g)"/>
+</svg>
+

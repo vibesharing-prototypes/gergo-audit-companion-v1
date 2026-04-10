@@ -1,0 +1,17 @@
+{
+  "name": "diligent-evidence-companion",
+  "productName": "Diligent Evidence Companion",
+  "version": "0.1.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "license": "UNLICENSED",
+  "description": "Agentic GRC helper for tracking evidence report statuses",
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^39.2.7",
+    "electron-reload": "^2.0.0-alpha.1"
+  }
+}
+
